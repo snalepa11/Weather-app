@@ -1,8 +1,12 @@
 header {
     background-color: blue;
+    color: azure;
+    text-align: center;
+    font-size: x-large;
 }
 
-h1 {
-font-size: x-large;
+h2 {
+    font-size: xx-large;
 }
+
 
