@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
-    <header>
-        <h1>Weather Dashboard</h1>
-    </header>
+    <div class="container">
+        <h1 class="row">Weather Dashboard</h1>
+    </div>
 
-    <aside>
+    <aside class="col-3">
         <h2>Search for a City:</h2>
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
@@ -22,9 +22,12 @@
           </form>
         </div>
       </nav>
+      <!--History container - in js, creating buttons all thru local storage - for loop-->
     </aside>
 
-    <div> <!-- cards and main display -->
+    <div class="col-9">
+         <!-- One section: Main section. Display: card, city, date, icon, 3 weather data 
+        section 2 forecast: cards - produced through for loop, -->
     </div>
 <script src="./assets/script.js"></script>
 </body>
