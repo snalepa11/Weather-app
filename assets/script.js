@@ -19,18 +19,45 @@ function searchCity(e) {
 //purpose is to pass search thru to get lat, long, name geo to use in the weather api fetch, calling out next function to pull weather data.
 
 function geoFetch(search) {
-    console.log(search);
-
     var geoURL = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=5&appid=${apiKey}`
 
     fetch(geoURL)
         .then(function (response) {
             return response.json();
         }).then(function (data) {
-            console.log(data[0]);
-            //historySave(search)
-            weatherFetch(data[0])
+            historySave(search);
+            weatherFetch(data[0]);
         })
+}
+
+function historySave(city) {    
+    var localStrgCity = localStorage.getItem("savedCities");
+    var localStrgCityArr = []
+   
+    if(typeof localStrgCity == "string"){
+        localStrgCityArr = JSON.parse(localStrgCity)
+    }
+
+    if(!localStrgCityArr.includes(city)) {
+        localStrgCityArr.push(city)
+    }    
+    localStorage.setItem("savedCities", JSON.stringify(localStrgCityArr))
+
+    
+    var locationBtn = document.getElementById("locationBtn");
+
+
+    for (var i = 0; i < localStrgCityArr.length; i++) {
+        if(!document.getElementById(localStrgCityArr[i])) {
+            var searchHistoryEntry = document.createElement("button");
+            searchHistoryEntry.setAttribute("id", localStrgCityArr[i])
+            searchHistoryEntry.setAttribute("class", "btn btn-primary");
+    
+    
+            searchHistoryEntry.textContent = `${localStrgCityArr[i]}`
+            locationBtn.appendChild(searchHistoryEntry);
+        }
+    }
 }
 
 //fetching weather data, then calling out next functions to display for current/ forecast html divs
@@ -39,9 +66,10 @@ function weatherFetch(location) {
 
     var { lat, lon } = location
     var city = location.name
+
     console.log(lat)
     console.log(lon)
-//tried exclude hourly to see if I could simplify
+    //tried exclude hourly to see if I could simplify
     var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&exclude=hourly`
 
     fetch(weatherAPI)
@@ -61,9 +89,9 @@ function currentDisplay(city, weather) {
     console.log(weather);
 
     //pull data from api 
-    var temp = Math.floor(((weather.main.temp-273.15)*1.8)+32);
+    var temp = Math.floor(((weather.main.temp - 273.15) * 1.8) + 32);
     var wind = Math.floor(weather.wind.speed * 2.236936);
-    var humidity = weather.main.humidity
+    var humidity = weather.main.humidity;
     var currentDate = new Date();
 
 
@@ -91,71 +119,60 @@ function currentDisplay(city, weather) {
     cardBody.appendChild(humidityEl);
 }
 
-
-
-
-
-    //pull data from api
+//maybe something wrong with dataList being passed down?
+function forecastDisplay(dataList) {
+    console.log(dataList);
+   
+    //Header 5 day forecast and clear container innerHTML
+    function atNoon(){
+        var text = dataList.dt_txt
+        return text.includes("12");
+    }
+    var futureForecast = dataList.filter(atNoon)
+    console.log(futureForecast);
     
+    for (let i = 1; i < futureForecast.length; i++) {
+         dataList[i] = futureForecast[i]
+        // Need to to create a card 
+        var forecastContainer = document.getElementById("foreast5")
 
-    function forecastDisplay(dataList){
-        console.log(forecast);
-            // Need to to create a card 
-            var forCard = document.getElementById("foreast5")
-            forCard.setAttribute("class", "card", "style", "width: 18rem")
-        
-            var forCardBody = document.getElementById("cardmain")
-            forCardBody.setAttribute("class", "card-body")
-                for (let i = 0; i < 5; i++){
-                  
+        // forCard.setAttribute("style", "width: 18rem") 
+        var card = document.createElement("div")
+        card.setAttribute("class", "card")
+        var cardBody = document.createElement("div")
+        cardBody.setAttribute("class", "card-body")
+        // var forCardBody = document.getElementById("cardmain")
+        // forCardBody.setAttribute("class", "card-body")
+        card.appendChild(cardBody)
+
         //             const forecastDiv = $(`div[data-fiveday="${i}"]`)[0];
-            
-                    var foreTemp = Math.floor(((dataList[i].main.temp-273.15)*1.8)+32);
-                    var foreWind = Math.floor(dataList[i].wind.speed * 2.236936);
-                    var foreHumidity = dataList[i].main.humidity
-                    var foreDate = new Date(dataList[i]);
+
+        var foreTemp = Math.floor(((dataList[i].main.temp - 273.15) * 1.8) + 32);
+        var foreWind = Math.floor(dataList[i].wind.speed * 2.236936);
+        var foreHumidity = dataList[i].main.humidity;
+        var foreDate = new Date(dataList[i]);
         //             const currentIconSrc = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
         //             const date = 
-         //            const day = intToDay(date.getDay())
-            
-                    var dateEl = document.createElement("h4")
-                    var foreTempEl = document.createElement("p")
-                    var foreWindEl = document.createElement("p")
-                    var foreHumidityEl = document.createElement("p")
-                    
-                    foreTempEl.textContent = `Temp: ${foreTemp} ℉`
-                    foreWindEl.textContent = `Wind: ${foreWind} mph`
-                    foreHumidityEl.textContent = `Humidity: ${foreHumidity} %`
-                    dateEl.textContent = '${foreDate}'
+        //            const day = intToDay(date.getDay())
 
-                    forCardBody.appendChild(dateEl);
-                    forCardBody.appendChild(foreTempEl);
-                    forCardBody.appendChild(foreWindEl);
-                    forCardBody.appendChild(foreHumidityEl);
-        
+        var dateEl = document.createElement("h4")
+        var foreTempEl = document.createElement("p")
+        var foreWindEl = document.createElement("p")
+        var foreHumidityEl = document.createElement("p")
+
+        foreTempEl.textContent = `Temp: ${foreTemp} ℉`
+        foreWindEl.textContent = `Wind: ${foreWind} mph`
+        foreHumidityEl.textContent = `Humidity: ${foreHumidity} %`
+        dateEl.textContent = `${foreDate}`
+
+        // forCardBody.appendChild(dateEl);
+        // forCardBody.appendChild(foreTempEl);
+        // forCardBody.appendChild(foreWindEl);
+        // forCardBody.appendChild(foreHumidityEl);
+        cardBody.append(dateEl, foreTempEl, foreWindEl, foreHumidityEl)
+        forecastContainer.append(card)
     }
 }
-
-
-//     //cWe already have an array from data so we need to ensure that each day has the correct info from array cooresponding to date
-//     var date = []
-//     
-//    // create for loop for card 
-    
-
-    
-//}
-
-// function setLocal(weatherObj){
-//     console.log(weatherObj);
-
-// }
-
-// function getLocal(){
-// var localStrg = localStorage.getItem()
-// }
-
-// function Displaylocal(){
 
 // var localBtns = document.createElement('button')
 

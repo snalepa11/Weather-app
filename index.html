@@ -14,7 +14,7 @@
         <h1>Weather Dashboard</h1>
     </header>
 
-    <div class="top-box">
+    <div class="top-box row">
         <aside class="col-3">
             <h2>Search for a City:</h2>
             <nav class="navbar bg-body-tertiary">
@@ -26,10 +26,10 @@
                 </div>
             </nav>
     
-            <div class="locationBtn" id="history" class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary" type="button">Location</button>
+             <!--History container - in js, creating buttons all thru local storage - for loop-->
+            <div id="locationBtn" id="history" class="d-grid gap-2 col-6 mx-auto">
+                <!-- Dynamically add button here via javascript-->
             </div>
-            <!--History container - in js, creating buttons all thru local storage - for loop-->
         </aside>
     
         <div class="col-9">
@@ -40,17 +40,18 @@
               </div>
              <!--
             section 2 forecast: cards - produced through for loop,  -->
-        </div>
-    </div> 
+       
 
     
-        <div id="forecast5" class="card" style="width: 18rem;">
-            <div id="cardmain" class="card-body">
+        <div id="forecast5" class="row" style="width: 18rem;">
+            <!-- <div id="cardmain" class="card-body">
               <h5 class="card-title"></h5>
               <p class="card-text"></p> 
-            </div>
+            </div> -->
           </div>  
     
+        </div>
+    </div> 
 
 <script src="./assets/script.js"></script>
 </body>
