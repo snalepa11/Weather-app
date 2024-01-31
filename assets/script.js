@@ -41,8 +41,8 @@ function weatherFetch(location) {
     var city = location.name
     console.log(lat)
     console.log(lon)
-
-    var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`
+//tried exclude hourly to see if I could simplify
+    var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&exclude=hourly`
 
     fetch(weatherAPI)
         .then(function (response) {
@@ -93,19 +93,54 @@ function currentDisplay(city, weather) {
 
 
 
-// function forecastDisplay(dataList){
-// console.log(forecast);
-//     // Need to to create a card 
-//     var forCard = document.getElementById("foreast5")
-//     forCard.setAttribute("class", "card", "style", "width: 18rem")
 
-//     var forCardBody = document.getElementById("cardmain")
-//     forCardBody.setAttribute("class", "card-body")
+
+    //pull data from api
+    
+
+    function forecastDisplay(dataList){
+        console.log(forecast);
+            // Need to to create a card 
+            var forCard = document.getElementById("foreast5")
+            forCard.setAttribute("class", "card", "style", "width: 18rem")
+        
+            var forCardBody = document.getElementById("cardmain")
+            forCardBody.setAttribute("class", "card-body")
+                for (let i = 0; i < 5; i++){
+                  
+        //             const forecastDiv = $(`div[data-fiveday="${i}"]`)[0];
+            
+                    var foreTemp = Math.floor(((dataList[i].main.temp-273.15)*1.8)+32);
+                    var foreWind = Math.floor(dataList[i].wind.speed * 2.236936);
+                    var foreHumidity = dataList[i].main.humidity
+                    var foreDate = new Date(dataList[i]);
+        //             const currentIconSrc = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
+        //             const date = 
+         //            const day = intToDay(date.getDay())
+            
+                    var dateEl = document.createElement("h4")
+                    var foreTempEl = document.createElement("p")
+                    var foreWindEl = document.createElement("p")
+                    var foreHumidityEl = document.createElement("p")
+                    
+                    foreTempEl.textContent = `Temp: ${foreTemp} ℉`
+                    foreWindEl.textContent = `Wind: ${foreWind} mph`
+                    foreHumidityEl.textContent = `Humidity: ${foreHumidity} %`
+                    dateEl.textContent = '${foreDate}'
+
+                    forCardBody.appendChild(dateEl);
+                    forCardBody.appendChild(foreTempEl);
+                    forCardBody.appendChild(foreWindEl);
+                    forCardBody.appendChild(foreHumidityEl);
+        
+    }
+}
+
 
 //     //cWe already have an array from data so we need to ensure that each day has the correct info from array cooresponding to date
-//     var date = 
-
-//     create for loop for card 
+//     var date = []
+//     
+//    // create for loop for card 
     
 
     
