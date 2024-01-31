@@ -93,15 +93,23 @@ function currentDisplay(city, weather) {
 
 
 
-function forecastDisplay(dataList){
-console.log(forecast);
-    // Need to to create a card 
-    // create for loop for card 
-    // display the data 
+// function forecastDisplay(dataList){
+// console.log(forecast);
+//     // Need to to create a card 
+//     var forCard = document.getElementById("foreast5")
+//     forCard.setAttribute("class", "card", "style", "width: 18rem")
 
-    var card = document.createElement("div")
-    card.setAttribute("")
-}
+//     var forCardBody = document.getElementById("cardmain")
+//     forCardBody.setAttribute("class", "card-body")
+
+//     //cWe already have an array from data so we need to ensure that each day has the correct info from array cooresponding to date
+//     var date = 
+
+//     create for loop for card 
+    
+
+    
+//}
 
 // function setLocal(weatherObj){
 //     console.log(weatherObj);
