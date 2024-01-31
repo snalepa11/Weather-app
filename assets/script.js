@@ -62,7 +62,7 @@ function currentDisplay(city, weather) {
 
     //pull data from api 
     var temp = Math.floor(((weather.main.temp-273.15)*1.8)+32);
-    var wind = weather.wind.speed
+    var wind = Math.floor(weather.wind.speed * 2.236936);
     var humidity = weather.main.humidity
     var currentDate = new Date();
 
@@ -81,8 +81,8 @@ function currentDisplay(city, weather) {
 
     //join the data with a card - LOOK INTO TIMEZONE
     tempEl.textContent = `Temp: ${temp} ℉`
-    windEl.textContent = `Wind: ${wind}`
-    humidityEl.textContent = `Humidity: ${humidity}`
+    windEl.textContent = `Wind: ${wind} mph`
+    humidityEl.textContent = `Humidity: ${humidity} %`
     cityEl.textContent = `${city} (${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()})`
 
     cardBody.appendChild(cityEl);
