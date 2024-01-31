@@ -9,4 +9,6 @@ h2 {
     font-size: xx-large;
 }
 
-
+.top-box {
+    display: flex;
+}
