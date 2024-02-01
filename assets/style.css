@@ -13,6 +13,7 @@ h2 {
     display: flex;
 }
 
-.forecastrow{
+.forecastCardContainer{
     display: flex;
+    justify-content: space-around;
 }

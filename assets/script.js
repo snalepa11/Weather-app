@@ -51,6 +51,8 @@ function historySave(city) {
             var searchHistoryEntry = document.createElement("button");
             searchHistoryEntry.setAttribute("id", localStrgCityArr[i])
             searchHistoryEntry.setAttribute("class", "btn btn-primary");
+
+            searchHistoryEntry.addEventListener("click", geoFetch(localStrgCityArr[i]))
     
     
             searchHistoryEntry.textContent = `${localStrgCityArr[i]}`
@@ -92,6 +94,7 @@ function currentDisplay(city, weather) {
     mainCard.setAttribute("class", "card")
 
     var cardBody = document.getElementById("card-body")
+    cardBody.innerHTML = null;
     cardBody.setAttribute("class", "card-body")
 
     var cityEl = document.createElement("h1")
@@ -113,7 +116,13 @@ function currentDisplay(city, weather) {
 
 //maybe something wrong with dataList being passed down?
 function forecastDisplay(dataList) {   
-    //Header 5 day forecast and clear container innerHTML
+    //clear container innerHTML
+    var forecastContainer = document.getElementById("forecast5")
+    forecastContainer.innerHTML=null;
+    var forecastHeader = document.createElement("h2")
+    forecastHeader.textContent=`5 Day Forecast:`
+    forecastContainer.appendChild(forecastHeader)
+
     function atNoon(weatherItem){
         var text = weatherItem.dt_txt
         return text.includes("12");
@@ -121,24 +130,12 @@ function forecastDisplay(dataList) {
 
     var futureForecast = dataList.filter((weatherItem) => atNoon(weatherItem))
     console.log(futureForecast);
-    
+
+    var forecastContainer = document.getElementById("forecastCardContainer")
+    forecastContainer.innerHTML=null;
+
     for (let i = 0; i < futureForecast.length; i++) {
-         dataList[i] = futureForecast[i]
-        
-         // Need to to create a card 
-        var forecastContainer = document.getElementById("forecast5")
-
-        /**
-          
-            <div class="card text-bg-secondary mb-3" style="max-width: 18rem;">
-                <div class="card-header">Header</div>
-                <div class="card-body">
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div> 
-         */
-
-        // forCard.setAttribute("style", "width: 18rem") 
+       
         var card = document.createElement("div")
         card.setAttribute("class", "card text-bg-secondary mb-3")
 
@@ -149,15 +146,16 @@ function forecastDisplay(dataList) {
         var cardBody = document.createElement("div")
         cardBody.setAttribute("class", "card-body")
 
-        var foreTemp = Math.floor(((dataList[i].main.temp - 273.15) * 1.8) + 32);
-        var foreWind = Math.floor(dataList[i].wind.speed * 2.236936);
-        var foreHumidity = dataList[i].main.humidity;
-        var foreDate = new Date(dataList[i]);
+        var foreTemp = Math.floor(((futureForecast[i].main.temp - 273.15) * 1.8) + 32);
+        var foreWind = Math.floor(futureForecast[i].wind.speed * 2.236936);
+        var foreHumidity = futureForecast[i].main.humidity;
+
+        var foreDate = new Date(futureForecast[i].dt_txt);
         //             const currentIconSrc = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
         //             const date = 
         //            const day = intToDay(date.getDay())
 
-        var dateEl = document.createElement("h4")
+        var dateEl = document.createElement("h3")
         var foreTempEl = document.createElement("p")
         var foreWindEl = document.createElement("p")
         var foreHumidityEl = document.createElement("p")
@@ -165,13 +163,14 @@ function forecastDisplay(dataList) {
         foreTempEl.textContent = `Temp: ${foreTemp} ℉`
         foreWindEl.textContent = `Wind: ${foreWind} mph`
         foreHumidityEl.textContent = `Humidity: ${foreHumidity} %`
-        dateEl.textContent = `${foreDate}`
+        
+        dateEl.textContent = `${foreDate.getMonth() + 1}/${foreDate.getDate()}/${foreDate.getFullYear()}`
 
-        // forCardBody.appendChild(dateEl);
-        // forCardBody.appendChild(foreTempEl);
-        // forCardBody.appendChild(foreWindEl);
-        // forCardBody.appendChild(foreHumidityEl);
-        cardBody.appendChild(dateEl, foreTempEl, foreWindEl, foreHumidityEl)
+        cardBody.appendChild(dateEl);
+        cardBody.appendChild(foreTempEl);
+        cardBody.appendChild(foreWindEl);
+        cardBody.appendChild(foreHumidityEl);
+        
         card.appendChild(cardHeader)
         card.appendChild(cardBody)
 
