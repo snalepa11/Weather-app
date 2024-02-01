@@ -12,3 +12,7 @@ h2 {
 .top-box {
     display: flex;
 }
+
+.forecastrow{
+    display: flex;
+}

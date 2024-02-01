@@ -12,7 +12,6 @@ function searchCity(e) {
     }
     e.preventDefault()
     var search = searchInput.value.trim()
-    console.log(search);
     geoFetch(search)
     searchInput.innerHTML = ""
 }
@@ -62,13 +61,9 @@ function historySave(city) {
 
 //fetching weather data, then calling out next functions to display for current/ forecast html divs
 function weatherFetch(location) {
-    console.log(location);
-
     var { lat, lon } = location
     var city = location.name
 
-    console.log(lat)
-    console.log(lon)
     //tried exclude hourly to see if I could simplify
     var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&exclude=hourly`
 
@@ -76,7 +71,6 @@ function weatherFetch(location) {
         .then(function (response) {
             return response.json();
         }).then(function (data) {
-            console.log(data.list);
             //current day weather data
             currentDisplay(city, data.list[0])
             //forecast by day weather data
@@ -86,8 +80,6 @@ function weatherFetch(location) {
 
 //next function: display current data
 function currentDisplay(city, weather) {
-    console.log(weather);
-
     //pull data from api 
     var temp = Math.floor(((weather.main.temp - 273.15) * 1.8) + 32);
     var wind = Math.floor(weather.wind.speed * 2.236936);
@@ -120,32 +112,42 @@ function currentDisplay(city, weather) {
 }
 
 //maybe something wrong with dataList being passed down?
-function forecastDisplay(dataList) {
-    console.log(dataList);
-   
+function forecastDisplay(dataList) {   
     //Header 5 day forecast and clear container innerHTML
-    function atNoon(){
-        var text = dataList.dt_txt
+    function atNoon(weatherItem){
+        var text = weatherItem.dt_txt
         return text.includes("12");
     }
-    var futureForecast = dataList.filter(atNoon)
+
+    var futureForecast = dataList.filter((weatherItem) => atNoon(weatherItem))
     console.log(futureForecast);
     
-    for (let i = 1; i < futureForecast.length; i++) {
+    for (let i = 0; i < futureForecast.length; i++) {
          dataList[i] = futureForecast[i]
-        // Need to to create a card 
-        var forecastContainer = document.getElementById("foreast5")
+        
+         // Need to to create a card 
+        var forecastContainer = document.getElementById("forecast5")
+
+        /**
+          
+            <div class="card text-bg-secondary mb-3" style="max-width: 18rem;">
+                <div class="card-header">Header</div>
+                <div class="card-body">
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div> 
+         */
 
         // forCard.setAttribute("style", "width: 18rem") 
         var card = document.createElement("div")
-        card.setAttribute("class", "card")
+        card.setAttribute("class", "card text-bg-secondary mb-3")
+
+        // TODO : We want to add Date
+        var cardHeader = document.createElement("div")
+        cardHeader.setAttribute("class", "card-header")
+
         var cardBody = document.createElement("div")
         cardBody.setAttribute("class", "card-body")
-        // var forCardBody = document.getElementById("cardmain")
-        // forCardBody.setAttribute("class", "card-body")
-        card.appendChild(cardBody)
-
-        //             const forecastDiv = $(`div[data-fiveday="${i}"]`)[0];
 
         var foreTemp = Math.floor(((dataList[i].main.temp - 273.15) * 1.8) + 32);
         var foreWind = Math.floor(dataList[i].wind.speed * 2.236936);
@@ -169,12 +171,10 @@ function forecastDisplay(dataList) {
         // forCardBody.appendChild(foreTempEl);
         // forCardBody.appendChild(foreWindEl);
         // forCardBody.appendChild(foreHumidityEl);
-        cardBody.append(dateEl, foreTempEl, foreWindEl, foreHumidityEl)
-        forecastContainer.append(card)
+        cardBody.appendChild(dateEl, foreTempEl, foreWindEl, foreHumidityEl)
+        card.appendChild(cardHeader)
+        card.appendChild(cardBody)
+
+        forecastContainer.appendChild(card)
     }
 }
-
-// var localBtns = document.createElement('button')
-
-// for loop
-// }
